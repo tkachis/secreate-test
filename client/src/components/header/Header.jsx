@@ -23,7 +23,7 @@ const Header = () => {
 			<div className="options">
 				<CartIcon toggleCartHidden={toggleCartHidden} cartItems={cartItems} />
 			</div>
-			{!hidden && <CartDropdown cartItems={cartItems} />}
+			{!hidden && <CartDropdown />}
 		</header>
 	)
 }

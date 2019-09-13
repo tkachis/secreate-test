@@ -1,19 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import axios from 'axios'
 
 import CustomButton from '../custom-button/CustomButton'
 import CartItem from '../cart-item/CartItem'
 
+import Context from '../../context'
+import { CLEAR_CART } from '../../constants'
+
 import './cart-dropdown.scss'
 
-const CartDropdown = ({ cartItems }) => {
+const CartDropdown = () => {
+	const {
+		state: { cartItems },
+		dispatch,
+	} = useContext(Context)
+
 	const [totalPrice, setTotalPrice] = useState(null)
-	// в крупном приложении желательно вынести в actions ч/з
-	// middleware redux, например thunk или saga
+	// в крупном приложении, желательно, вынести в actions ч/з
+	// middleware redux, например, thunk или saga
 
 	const getTotalPrice = async () => {
-		const res = await axios.post('/api/cart/total', { cartItems })
-		setTotalPrice({ ...res.data })
+		try {
+			const res = await axios.post('/api/cart/total', { cartItems })
+			setTotalPrice({ ...res.data })
+			dispatch({ type: CLEAR_CART })
+		} catch (err) {
+			console.error(err)
+		}
 	}
 
 	return (
